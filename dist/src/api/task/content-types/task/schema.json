@@ -1,0 +1,43 @@
+{
+    "kind": "collectionType",
+    "collectionName": "tasks",
+    "info": {
+        "singularName": "task",
+        "pluralName": "tasks",
+        "displayName": "Task"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "blocks"
+        },
+        "hours": {
+            "type": "integer"
+        },
+        "date": {
+            "type": "date"
+        },
+        "typeOfWork": {
+            "type": "enumeration",
+            "enum": [
+                "FEATURE_DEVELOPMENT",
+                "BUG_FIXES",
+                "RESEARCH_AND_ANALYSIS"
+            ]
+        },
+        "projects": {
+            "type": "enumeration",
+            "enum": [
+                "PROJECT_A",
+                "PROJECT_B",
+                "PROJECT_C"
+            ]
+        }
+    }
+}

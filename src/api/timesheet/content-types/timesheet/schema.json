@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "timesheets",
+  "info": {
+    "singularName": "timesheet",
+    "pluralName": "timesheets",
+    "displayName": "Timesheet"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "week": {
+      "type": "integer"
+    },
+    "dateRange": {
+      "type": "string"
+    },
+    "year": {
+      "type": "integer"
+    },
+    "month": {
+      "type": "integer"
+    },
+    "startDate": {
+      "type": "date"
+    },
+    "endDate": {
+      "type": "date"
+    },
+    "totalHours": {
+      "type": "integer"
+    },
+    "workStatus": {
+      "type": "enumeration",
+      "enum": [
+        "COMPLETED",
+        "INCOMPLETE",
+        "MISSING"
+      ]
+    },
+    "tasks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::task.task"
+    }
+  }
+}
