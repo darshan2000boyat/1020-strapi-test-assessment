@@ -11,24 +11,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "week": {
-      "type": "integer"
-    },
-    "dateRange": {
-      "type": "string"
-    },
-    "year": {
-      "type": "integer"
-    },
-    "month": {
-      "type": "integer"
-    },
-    "startDate": {
-      "type": "date"
-    },
-    "endDate": {
-      "type": "date"
-    },
     "totalHours": {
       "type": "integer"
     },
@@ -44,6 +26,11 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::task.task"
+    },
+    "timesheet_date": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::timesheet-date.timesheet-date"
     }
   }
 }

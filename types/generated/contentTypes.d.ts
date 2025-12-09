@@ -501,6 +501,40 @@ export interface ApiTaskTask extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiTimesheetDateTimesheetDate
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'timesheet_dates';
+  info: {
+    displayName: 'Timesheet Date';
+    pluralName: 'timesheet-dates';
+    singularName: 'timesheet-date';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    dateRange: Schema.Attribute.String;
+    endDate: Schema.Attribute.Date;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timesheet-date.timesheet-date'
+    > &
+      Schema.Attribute.Private;
+    month: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    startDate: Schema.Attribute.Date;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    week: Schema.Attribute.Integer;
+    year: Schema.Attribute.Integer;
+  };
+}
+
 export interface ApiTimesheetTimesheet extends Struct.CollectionTypeSchema {
   collectionName: 'timesheets';
   info: {
@@ -515,27 +549,25 @@ export interface ApiTimesheetTimesheet extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    dateRange: Schema.Attribute.String;
-    endDate: Schema.Attribute.Date;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::timesheet.timesheet'
     > &
       Schema.Attribute.Private;
-    month: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
-    startDate: Schema.Attribute.Date;
     tasks: Schema.Attribute.Relation<'oneToMany', 'api::task.task'>;
+    timesheet_date: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::timesheet-date.timesheet-date'
+    >;
     totalHours: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    week: Schema.Attribute.Integer;
     workStatus: Schema.Attribute.Enumeration<
       ['COMPLETED', 'INCOMPLETE', 'MISSING']
     >;
-    year: Schema.Attribute.Integer;
   };
 }
 
@@ -1051,6 +1083,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::task.task': ApiTaskTask;
+      'api::timesheet-date.timesheet-date': ApiTimesheetDateTimesheetDate;
       'api::timesheet.timesheet': ApiTimesheetTimesheet;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
