@@ -491,6 +491,9 @@ export interface ApiTaskTask extends Struct.CollectionTypeSchema {
       ['PROJECT_A', 'PROJECT_B', 'PROJECT_C']
     >;
     publishedAt: Schema.Attribute.DateTime;
+    taskDocument: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
     title: Schema.Attribute.String;
     typeOfWork: Schema.Attribute.Enumeration<
       ['FEATURE_DEVELOPMENT', 'BUG_FIXES', 'RESEARCH_AND_ANALYSIS']
