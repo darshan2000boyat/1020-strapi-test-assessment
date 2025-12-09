@@ -22,7 +22,7 @@ function formatDateRange(startDate: string, endDate: string) {
   return `${startFormatter.format(start)} - ${endFormatter.format(end)}`;
 }
 
-// Helper function to create individual timesheet-date records
+
 async function createTimesheetDates(
   strapi: Core.Strapi,
   startDate: string,
@@ -33,7 +33,7 @@ async function createTimesheetDates(
   dateRange: string
 ) {
   try {
-    // Create and publish the timesheet-date
+
     const timesheetDate = await strapi.documents('api::timesheet-date.timesheet-date').create({
       data: {
         startDate,
@@ -43,7 +43,7 @@ async function createTimesheetDates(
         year,
         dateRange,
       },
-      status: 'published', // ✅ Publishes the document in v5
+      status: 'published',
     });
 
     strapi.log.info(
@@ -51,7 +51,7 @@ async function createTimesheetDates(
     );
 
 
-    // ✅ Return the numeric id for database-level relation
+
     return { id: +timesheetDate?.id - 1, documentId: timesheetDate?.documentId };
   } catch (error) {
     strapi.log.error('Error creating timesheet-dates:', error);
@@ -96,7 +96,7 @@ export default {
         const year = new Date(startDate).getFullYear();
         const dateRange = formatDateRange(startDate, endDate);
 
-        // ✅ Get the numeric id (not documentId)
+
         const relationId = await createTimesheetDates(
           strapi,
           startDate,
@@ -107,7 +107,7 @@ export default {
           dateRange
         );
 
-        // ✅ Assign the numeric id for database-level relation
+
         if (relationId) {
 
           data.timesheet_date = {
@@ -116,11 +116,52 @@ export default {
         }
       },
 
-      async afterCreate(event: any) {
-        const { data } = event.params;
+      async beforeDelete(event: any) {
+        const where = event.params?.where;
 
 
+        if (!where?.id) return;
+
+        const timesheetId = where.id;
+
+
+        const timesheet = await strapi
+          .documents("api::timesheet.timesheet")
+          .findMany({
+            filters: { id: timesheetId },
+            populate: ["timesheet_date"],
+            limit: 1,
+          });
+
+
+
+
+        const record = timesheet[0];
+
+        if (!record?.timesheet_date) return;
+
+        const timesheetDateDocumentId = record.timesheet_date.documentId;
+
+        if (!timesheetDateDocumentId) return;
+
+        try {
+
+          await strapi
+            .documents("api::timesheet-date.timesheet-date")
+            .delete({
+              documentId: timesheetDateDocumentId,
+            });
+
+          strapi.log.info(
+            `Deleted timesheet-date (${timesheetDateDocumentId}) for timesheet id ${timesheetId}`
+          );
+        } catch (error) {
+          strapi.log.error("Failed to delete timesheet-date", error);
+          throw error;
+        }
       }
+
+
     });
   },
 };
